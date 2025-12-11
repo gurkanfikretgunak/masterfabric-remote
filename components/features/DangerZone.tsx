@@ -32,7 +32,7 @@ export function DangerZoneCard() {
 
   return (
     <Card className="border-red-200 bg-red-50/20">
-      <div className="px-6 py-4 border-b border-red-200 flex items-center justify-between">
+      <div className="px-6 py-4 border-b border-red-200 flex items-center justify-between" style={{ backgroundColor: 'var(--color-red-50)' }}>
         <h2 className="text-sm font-medium text-red-700">Danger Zone</h2>
       </div>
       <CardContent>
