@@ -1,8 +1,9 @@
 import { Loader2 } from 'lucide-react';
 import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { LucideIcon } from 'lucide-react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
+  children?: ReactNode;
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   loading?: boolean;
   icon?: React.ComponentType<{ className?: string }>;
@@ -37,21 +38,28 @@ export function Button({
       ) : Icon ? (
         <Icon className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
       ) : null}
-      <span className="transition-all duration-200">{children}</span>
+      {children && <span className="transition-all duration-200">{children}</span>}
     </button>
   );
+}
+
+interface DangerButtonSolidProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+  icon?: LucideIcon;
 }
 
 export function DangerButtonSolid({
   children,
   className = '',
+  icon: Icon,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement>) {
+}: DangerButtonSolidProps) {
   return (
     <button
       className={`px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-800 ${className}`}
       {...props}
     >
+      {Icon && <Icon className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />}
       <span className="transition-all duration-200">{children}</span>
     </button>
   );

@@ -59,11 +59,15 @@ interface TableCellProps {
   children: ReactNode;
   align?: 'left' | 'right';
   className?: string;
+  colSpan?: number;
 }
 
-export function TableCell({ children, align = 'left', className = '' }: TableCellProps) {
+export function TableCell({ children, align = 'left', className = '', colSpan }: TableCellProps) {
   return (
-    <td className={`px-6 py-4 text-sm ${align === 'right' ? 'text-right' : 'text-left'} ${className}`}>
+    <td 
+      colSpan={colSpan}
+      className={`px-6 py-4 text-sm ${align === 'right' ? 'text-right' : 'text-left'} ${className}`}
+    >
       {children}
     </td>
   );
