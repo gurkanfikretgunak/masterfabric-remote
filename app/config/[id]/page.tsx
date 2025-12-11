@@ -1,3 +1,23 @@
+import { Metadata } from 'next';
+import { generateMetadata as generateSEOMetadata } from '@/lib/seo/metadata';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  // Since config pages require authentication and use client-side storage,
+  // we'll use a generic metadata with the config ID
+  return generateSEOMetadata({
+    title: 'Configuration Editor - MasterFabric Remote',
+    description: 'Edit and publish remote configurations for feature flags, A/B tests, and application settings.',
+    path: `/config/${params.id}`,
+    keywords: ['configuration editor', 'edit config', 'publish config'],
+    noindex: true, // Config pages are typically private
+    nofollow: true,
+  });
+}
+
 'use client';
 
 import { useEffect, useState } from 'react';
