@@ -105,16 +105,29 @@ export function Footer({
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         <div className="flex flex-col items-center justify-center gap-4 text-xs text-gray-500">
           {/* Built with section */}
-          <div className="flex items-center justify-center gap-2">
-            <span>Built with</span>
-            <Image
-              src="/cursot-logo-icon.svg"
-              alt=""
-              width={16}
-              height={16}
-              className="w-4 h-4"
-            />
-            <span>Cursor</span>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+              <span>Built with</span>
+              <Image
+                src="/cursot-logo-icon.svg"
+                alt=""
+                width={16}
+                height={16}
+                className="w-4 h-4"
+              />
+              <span className="font-medium">Cursor</span>
+              <span className="text-gray-300">•</span>
+              <span>Next.js</span>
+              <span className="text-gray-300">•</span>
+              <span>Supabase</span>
+              <span className="text-gray-300">•</span>
+              <span>TypeScript</span>
+              <span className="text-gray-300">•</span>
+              <span>Tailwind CSS</span>
+            </div>
+            <p className="text-xs text-gray-400 text-center max-w-2xl">
+              A modern multi-tenant configuration management system powered by cutting-edge web technologies.
+            </p>
           </div>
 
           {/* Links section */}

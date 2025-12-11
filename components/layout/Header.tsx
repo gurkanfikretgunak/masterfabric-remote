@@ -133,12 +133,15 @@ export function Header() {
             <span className="hidden sm:inline">Settings</span>
             <span className="sm:hidden">Settings</span>
           </Button>
-          <button
+          <Button
+            variant="ghost"
             onClick={handleSignOut}
-            className="px-3 sm:px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors whitespace-nowrap"
+            icon={LogOut}
+            className="flex-1 sm:flex-initial"
           >
-            Sign Out
-          </button>
+            <span className="hidden sm:inline">Sign Out</span>
+            <span className="sm:hidden">Sign Out</span>
+          </Button>
         </div>
       </div>
     </header>

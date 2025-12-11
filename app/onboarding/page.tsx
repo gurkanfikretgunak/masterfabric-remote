@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Copy, Zap, ExternalLink, Info } from 'lucide-react';
+import Image from 'next/image';
+import { Copy, Zap, ExternalLink, Info, ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -206,30 +207,70 @@ export default function OnboardingPage() {
         <Card className="mb-6">
           <CardHeader title="Tech Stack" />
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-gray-900">Frontend</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Next.js 16 (React 19)</li>
-                  <li>• TypeScript</li>
-                  <li>• Tailwind CSS 4</li>
-                  <li>• Lucide React Icons</li>
-                </ul>
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 flex-wrap text-sm text-gray-600">
+                <span>Built with</span>
+                <div className="flex items-center gap-1.5">
+                  <Image
+                    src="/cursot-logo-icon.svg"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="w-4 h-4"
+                  />
+                  <span className="font-medium">Cursor</span>
+                </div>
+                <span className="text-gray-300">•</span>
+                <div className="flex items-center gap-1.5">
+                  <Image
+                    src="/nextjs-logo-icon.svg"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="w-4 h-4"
+                  />
+                  <span>Next.js</span>
+                </div>
+                <span className="text-gray-300">•</span>
+                <div className="flex items-center gap-1.5">
+                  <Image
+                    src="/supabase-logo-icon.svg"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="w-4 h-4"
+                  />
+                  <span>Supabase</span>
+                </div>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-gray-900">Backend & Database</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Supabase (PostgreSQL)</li>
-                  <li>• Row Level Security (RLS)</li>
-                  <li>• PostgREST API</li>
-                  <li>• Supabase Auth</li>
-                </ul>
+              
+              {/* Hosting Suggestion */}
+              <div className="pt-4 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src="/vercel-logotype-icon.svg"
+                      alt="Vercel"
+                      width={80}
+                      height={20}
+                      className="h-5 w-auto"
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Recommended Hosting</p>
+                      <p className="text-xs text-gray-500">Deploy seamlessly on Vercel</p>
+                    </div>
+                  </div>
+                  <a
+                    href="https://vercel.com/new"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    <span>Deploy</span>
+                    <ExternalLinkIcon className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-500">
-                Built with modern web technologies for secure, scalable, and real-time configuration management.
-              </p>
             </div>
           </CardContent>
         </Card>
