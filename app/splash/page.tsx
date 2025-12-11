@@ -93,18 +93,8 @@ export default function SplashPage() {
     <div className="min-h-screen bg-white flex flex-col">
       <div className="flex-1 flex items-center justify-center">
         {!showContent ? (
-          // Initial splash with logo (3 seconds)
+          // Initial splash (3 seconds)
           <div className="text-center">
-            <div className="flex items-center justify-center mb-8">
-              <Image
-                src="/cursot-logo-icon.svg"
-                alt="Cursor Logo"
-                width={120}
-                height={120}
-                className="w-24 h-24 sm:w-32 sm:h-32"
-                priority
-              />
-            </div>
             <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
               MasterFabric Remote
             </h1>
