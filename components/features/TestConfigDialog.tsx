@@ -157,7 +157,7 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
             </div>
             <div>
               <p className="text-xs text-blue-800 font-medium mb-1">Request Body:</p>
-              <CodeBlock code={JSON.stringify(requestBody, null, 2)} language="json" copyable={false} />
+              <CodeBlock code={JSON.stringify(requestBody, null, 2)} language="json" copyable={true} />
             </div>
             <p className="text-xs text-blue-600 mt-2">
               Using RPC function <code className="bg-white px-1 rounded">get_published_config</code> - Returns JSON directly (not wrapped in array).

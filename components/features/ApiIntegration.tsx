@@ -298,7 +298,7 @@ Future<Map<String, dynamic>> fetchConfig() async {
         <CodeBlock 
           code={getCodeExample(method, activeTab)} 
           language={getSyntaxLanguage(activeTab)}
-          copyable={false} 
+          copyable={true} 
         />
       </div>
     );

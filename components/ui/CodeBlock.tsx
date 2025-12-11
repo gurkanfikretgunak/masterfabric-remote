@@ -34,6 +34,7 @@ export function CodeBlock({
         customStyle={{
           margin: 0,
           padding: '1rem',
+          paddingRight: copyable ? '4.5rem' : '1rem',
           borderRadius: '0.5rem',
           fontSize: '0.875rem',
           lineHeight: '1.5',
