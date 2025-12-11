@@ -83,11 +83,11 @@ export function DashboardSkeleton() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-200 bg-gray-50">
-                    {['Name', 'API Key', 'Configs', 'Created', ''].map((_, i) => (
+                    {['Tenant Name', 'Configs', 'Actions'].map((_, i) => (
                       <th
                         key={i}
                         className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase ${
-                          i === 4 ? 'text-right' : 'text-left'
+                          i === 2 ? 'text-right' : 'text-left'
                         }`}
                       >
                         <Skeleton height="0.75rem" width="4rem" />
@@ -102,13 +102,7 @@ export function DashboardSkeleton() {
                         <Skeleton height="1rem" width="8rem" />
                       </td>
                       <td className="px-6 py-4">
-                        <Skeleton height="1rem" width="12rem" />
-                      </td>
-                      <td className="px-6 py-4">
                         <Skeleton height="1rem" width="3rem" />
-                      </td>
-                      <td className="px-6 py-4">
-                        <Skeleton height="1rem" width="6rem" />
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">

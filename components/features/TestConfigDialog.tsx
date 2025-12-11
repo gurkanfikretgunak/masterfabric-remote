@@ -27,8 +27,12 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
   const supabaseUrl = storage.getSupabaseUrl();
   const supabaseAnonKey = storage.getSupabaseAnonKey();
   
-  // RLS policy ensures only published configs (last_published_at IS NOT NULL) are returned
-  const endpoint = `${supabaseUrl}/rest/v1/app_configs?key_name=eq.${config.key_name}&tenant_id=eq.${config.tenant_id}&select=published_json`;
+  // Use RPC function to get published_json directly (returns JSON, not array)
+  const rpcEndpoint = `${supabaseUrl}/rest/v1/rpc/get_published_config`;
+  const requestBody = {
+    p_key_name: config.key_name,
+    p_tenant_id: config.tenant_id,
+  };
 
   const handleTest = async () => {
     // Check if config is published before testing
@@ -46,13 +50,14 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
     const startTime = Date.now();
 
     try {
-      // For public API access (anon RLS policy), only apikey header is needed
-      const res = await fetch(endpoint, {
-        method: 'GET',
+      // Use RPC function - POST request with JSON body
+      const res = await fetch(rpcEndpoint, {
+        method: 'POST',
         headers: {
           'apikey': supabaseAnonKey || '',
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(requestBody),
       });
 
       const endTime = Date.now();
@@ -65,10 +70,10 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
 
       const data = await res.json();
       
-      // Check if response is empty array
-      if (Array.isArray(data) && data.length === 0) {
+      // RPC function returns JSON directly (or empty object {} if not found)
+      if (data && Object.keys(data).length === 0) {
         setError('no-published-config');
-        showError('Empty response: Check Supabase RLS policy and config status');
+        showError('Empty response: Config not found or not published');
       } else {
         setResponse({
           status: res.status,
@@ -124,8 +129,8 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
               Request
             </label>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
-                GET
+              <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">
+                POST
               </span>
               <Button
                 variant="primary"
@@ -140,21 +145,22 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
             </div>
           </div>
           <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 font-mono text-sm text-gray-700 break-all">
-            {endpoint}
+            {rpcEndpoint}
           </div>
-          <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-xs text-blue-800 font-medium mb-1">Headers:</p>
-            <div className="text-xs text-blue-700 space-y-1 font-mono">
-              <div>apikey: {supabaseAnonKey?.substring(0, 20)}...</div>
+          <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
+            <div>
+              <p className="text-xs text-blue-800 font-medium mb-1">Headers:</p>
+              <div className="text-xs text-blue-700 space-y-1 font-mono">
+                <div>apikey: {supabaseAnonKey?.substring(0, 20)}...</div>
+                <div>Content-Type: application/json</div>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs text-blue-800 font-medium mb-1">Request Body:</p>
+              <CodeBlock code={JSON.stringify(requestBody, null, 2)} copyable={false} />
             </div>
             <p className="text-xs text-blue-600 mt-2">
-              Note: Public API access uses only the apikey header. The RLS policy allows anonymous access to published configs only.
-              <br />
-              <span className="text-orange-600 font-medium">If you get an empty array, make sure:</span>
-              <br />
-              1. The config has been published (check last_published_at)
-              <br />
-              2. The RLS policy has been updated to check last_published_at IS NOT NULL
+              Using RPC function <code className="bg-white px-1 rounded">get_published_config</code> - Returns JSON directly (not wrapped in array).
             </p>
           </div>
         </div>

@@ -20,13 +20,43 @@ export function ApiIntegration({ config, tenant }: ApiIntegrationProps) {
   const supabaseUrl = storage.getSupabaseUrl();
   const supabaseAnonKey = storage.getSupabaseAnonKey();
   
-  // Only query published configs (last_published_at IS NOT NULL)
-  // Note: RLS policy ensures only published configs are returned
-  const endpoint = `${supabaseUrl}/rest/v1/app_configs?key_name=eq.${config.key_name}&tenant_id=eq.${config.tenant_id}&select=published_json`;
+  // Use PostgREST RPC function to get published_json directly (returns JSON, not array)
+  // Alternative: Use table endpoint and extract published_json from array response
+  const rpcEndpoint = `${supabaseUrl}/rest/v1/rpc/get_published_config`;
+  const tableEndpoint = `${supabaseUrl}/rest/v1/app_configs?key_name=eq.${config.key_name}&tenant_id=eq.${config.tenant_id}&select=published_json&limit=1`;
   
-  // For public API access (anon RLS policy), only apikey header is needed
-  const curlCommand = `curl -X GET "${endpoint}" \\
+  // Recommended: Use RPC function (returns JSON directly)
+  const curlCommandRpc = `curl -X POST "${rpcEndpoint}" \\
+  -H "apikey: ${supabaseAnonKey || 'your-anon-key'}" \\
+  -H "Content-Type: application/json" \\
+  -d '{"p_key_name": "${config.key_name}", "p_tenant_id": "${config.tenant_id}"}'`;
+  
+  // Alternative: Use table endpoint (returns array, need to extract published_json)
+  const curlCommandTable = `curl -X GET "${tableEndpoint}" \\
   -H "apikey: ${supabaseAnonKey || 'your-anon-key'}"`;
+  
+  // JavaScript example using RPC function (recommended)
+  const jsExampleRpc = `// Using RPC function - returns JSON directly
+const response = await fetch('${rpcEndpoint}', {
+  method: 'POST',
+  headers: {
+    'apikey': '${supabaseAnonKey ? supabaseAnonKey.substring(0, 20) + '...' : 'your-anon-key'}',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    p_key_name: '${config.key_name}',
+    p_tenant_id: '${config.tenant_id}'
+  })
+});
+const config = await response.json(); // Direct JSON, no array!`;
+  
+  // JavaScript example using table endpoint (alternative)
+  const jsExampleTable = `// Using table endpoint - returns array, extract published_json
+const response = await fetch('${tableEndpoint}', {
+  headers: { 'apikey': '${supabaseAnonKey ? supabaseAnonKey.substring(0, 20) + '...' : 'your-anon-key'}' }
+});
+const data = await response.json();
+const config = data[0]?.published_json || {}; // Extract from array`;
 
   const formatRelativeTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -58,29 +88,51 @@ export function ApiIntegration({ config, tenant }: ApiIntegrationProps) {
       <CardContent className="space-y-6">
         {/* Description */}
         <div className="pb-4 border-b border-gray-200">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 mb-2">
             Use this endpoint to fetch published configuration data in your application. 
             The Supabase Anon Key is automatically included in the request headers for authentication.
           </p>
+          {!config.last_published_at && (
+            <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-800">
+              ⚠️ This config has not been published yet. You must publish it first before it will be available via API.
+            </div>
+          )}
         </div>
 
-        {/* Endpoint */}
-        <div>
-          <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
-            Endpoint
-          </label>
-          <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 font-mono text-sm text-gray-700 break-all">
-            GET {endpoint}
+        {/* API Examples */}
+        <div className="space-y-4">
+          {/* RPC Function Method (Recommended) */}
+          <div>
+            <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
+              Method 1: RPC Function (Recommended) - Returns JSON Directly
+            </label>
+            <CodeBlock code={curlCommandRpc} />
+            <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded text-xs text-green-800">
+              ✓ Returns JSON directly: <code className="bg-white px-1 rounded">{"{"}"en": {"{"}...{"}"}, "es": {"{"}...{"}"}{"}"}</code>
+            </div>
+            <div className="mt-2">
+              <p className="text-xs text-gray-600 font-medium mb-1">JavaScript:</p>
+              <CodeBlock code={jsExampleRpc} copyable={false} />
+            </div>
+          </div>
+
+          {/* Table Endpoint Method (Alternative) */}
+          <div>
+            <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
+              Method 2: Table Endpoint (Alternative) - Returns Array
+            </label>
+            <CodeBlock code={curlCommandTable} />
+            <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-800">
+              ⚠️ Returns array: <code className="bg-white px-1 rounded">[{"{"}"published_json": {"{"}...{"}"}{"}"}]</code> - Extract <code className="bg-white px-1 rounded">data[0].published_json</code>
+            </div>
+            <div className="mt-2">
+              <p className="text-xs text-gray-600 font-medium mb-1">JavaScript:</p>
+              <CodeBlock code={jsExampleTable} copyable={false} />
+            </div>
           </div>
         </div>
 
-        {/* cURL Example */}
-        <div>
-          <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
-            cURL Example
-          </label>
-          <CodeBlock code={curlCommand} />
-          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-xs text-blue-800 font-medium mb-2">API Key Information:</p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
@@ -107,7 +159,6 @@ export function ApiIntegration({ config, tenant }: ApiIntegrationProps) {
               </p>
             </div>
           </div>
-        </div>
 
         {/* Statistics */}
         <div className="flex items-center gap-6 pt-4 border-t border-gray-200">

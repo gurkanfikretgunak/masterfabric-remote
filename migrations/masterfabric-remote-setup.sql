@@ -101,7 +101,47 @@ CREATE POLICY "Public can read published configs via API"
 -- 8. Enable pgcrypto extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- 9. Create default admin user
+-- 9. Create PostgREST function to get published config JSON directly
+-- This function returns just the published_json content, not wrapped in an array
+-- Also increments request_count for tracking API usage
+CREATE OR REPLACE FUNCTION get_published_config(
+  p_key_name TEXT,
+  p_tenant_id UUID
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  v_published_json JSONB;
+  v_config_id UUID;
+BEGIN
+  -- Get published_json and config id for the given key_name and tenant_id
+  -- Only return if config is published (last_published_at IS NOT NULL)
+  SELECT id, published_json INTO v_config_id, v_published_json
+  FROM app_configs
+  WHERE key_name = p_key_name
+    AND tenant_id = p_tenant_id
+    AND last_published_at IS NOT NULL
+  LIMIT 1;
+  
+  -- If config found and published, increment request_count
+  IF v_config_id IS NOT NULL THEN
+    UPDATE app_configs
+    SET request_count = request_count + 1,
+        updated_at = NOW()
+    WHERE id = v_config_id;
+  END IF;
+  
+  -- Return published_json or empty object if not found or not published
+  RETURN COALESCE(v_published_json, '{}'::JSONB);
+END;
+$$;
+
+-- Grant execute permission to anon role for public API access
+GRANT EXECUTE ON FUNCTION get_published_config(TEXT, UUID) TO anon;
+
+-- 10. Create default admin user
 -- Note: You can also create this user manually via Supabase Dashboard > Authentication > Users
 DO $$
 DECLARE
