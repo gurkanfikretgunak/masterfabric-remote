@@ -386,6 +386,8 @@ class SupabaseService {
 ### Type Safety
 
 ```typescript
+
+
 // types/index.ts
 interface Tenant {
   id: string;
