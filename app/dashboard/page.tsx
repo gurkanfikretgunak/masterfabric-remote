@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, FileJson, Activity, Building2, Info } from 'lucide-react';
+import { Plus, FileJson, Activity, Building2, Info, RefreshCw } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -40,14 +40,19 @@ export default function DashboardPage() {
   const [deletingTenant, setDeletingTenant] = useState<Tenant | null>(null);
   const [deletingConfig, setDeletingConfig] = useState<AppConfigWithTenant | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadData();
   }, []);
 
-  const loadData = async () => {
+  const loadData = async (isRefresh = false) => {
     try {
-      setLoading(true);
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
       const client = getSupabaseClient();
       const service = new SupabaseService(client);
 
@@ -60,13 +65,24 @@ export default function DashboardPage() {
       setTenants(tenantsData);
       setConfigs(configsData);
       setStats(statsData);
+      
+      if (isRefresh) {
+        success('Data refreshed successfully');
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to load data');
       if (err.message?.includes('credentials')) {
         router.push('/onboarding');
       }
+      if (isRefresh) {
+        showError('Failed to refresh data');
+      }
     } finally {
-      setLoading(false);
+      if (isRefresh) {
+        setRefreshing(false);
+      } else {
+        setLoading(false);
+      }
     }
   };
 
@@ -156,6 +172,20 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
       <main className="max-w-6xl mx-auto py-6 sm:py-8 px-4 sm:px-6 flex-1">
+        <div className="flex items-start justify-end mb-6">
+          <button
+            onClick={() => loadData(true)}
+            disabled={refreshing || loading}
+            className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${
+              refreshing 
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+            }`}
+            title="Refresh data"
+          >
+            <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
         {error && (
           <div className="mb-6">
             <Alert message={error} type="error" />
@@ -163,6 +193,7 @@ export default function DashboardPage() {
         )}
 
         {/* Stats Cards */}
+        <div className={refreshing ? 'opacity-60 transition-opacity duration-200' : 'opacity-100 transition-opacity duration-200'}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
           <StatsCard
             title="Total Configs"
@@ -253,6 +284,7 @@ export default function DashboardPage() {
             />
           </CardContent>
         </Card>
+        </div>
 
         {/* Dialogs */}
         <NewConfigDialog
