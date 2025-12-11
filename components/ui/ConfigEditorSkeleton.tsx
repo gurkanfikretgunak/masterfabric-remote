@@ -1,5 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Footer } from '@/components/layout/Footer';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Skeleton, SkeletonText } from '@/components/ui/Skeleton';
 
