@@ -23,7 +23,7 @@ export function Button({
   const variants = {
     primary: 'bg-gray-900 text-white hover:bg-gray-800 hover:scale-105 focus:ring-gray-900 active:bg-gray-950',
     secondary: 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400 hover:bg-gray-50 hover:scale-105 focus:ring-gray-900 active:bg-gray-100',
-    ghost: 'px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 hover:scale-105 focus:ring-gray-900 active:bg-gray-100 rounded-md',
+    ghost: 'px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 hover:scale-105 focus:ring-gray-900 active:bg-gray-100 rounded-md [&_*]:transition-colors [&_*]:duration-200',
     danger: 'bg-white text-red-600 border border-red-200 hover:border-red-300 hover:bg-red-50 hover:scale-105 focus:ring-red-500 active:bg-red-100',
   };
 
@@ -38,7 +38,7 @@ export function Button({
       ) : Icon ? (
         <Icon className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
       ) : null}
-      {children && <span className="transition-all duration-200">{children}</span>}
+      {children && <span className="transition-all duration-200 pointer-events-none select-none">{children}</span>}
     </button>
   );
 }

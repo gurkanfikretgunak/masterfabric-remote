@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { EditorPanel } from '@/components/features/EditorPanel';
 import { ApiIntegration } from '@/components/features/ApiIntegration';
@@ -10,10 +10,11 @@ import { ConfigEditorSkeleton } from '@/components/ui/ConfigEditorSkeleton';
 import { Footer } from '@/components/layout/Footer';
 import { Alert } from '@/components/ui/Alert';
 import { ToastContainer } from '@/components/ui/Toast';
+import { EditConfigDialog } from '@/components/features/EditConfigDialog';
 import { useToast } from '@/lib/hooks/useToast';
 import { getSupabaseClient } from '@/lib/supabase/client';
 import { SupabaseService } from '@/lib/supabase/SupabaseService';
-import { AppConfigWithTenant, Tenant } from '@/types';
+import { AppConfigWithTenant, Tenant, UpdateConfigInput } from '@/types';
 
 export function ConfigEditorClient({ configId }: { configId: string }) {
   const router = useRouter();
@@ -23,6 +24,7 @@ export function ConfigEditorClient({ configId }: { configId: string }) {
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
+  const [showRenameDialog, setShowRenameDialog] = useState(false);
   const { toasts, removeToast, success, error: showError } = useToast();
 
   useEffect(() => {
@@ -103,6 +105,15 @@ export function ConfigEditorClient({ configId }: { configId: string }) {
     }
   };
 
+  const handleRenameConfig = async (id: string, data: UpdateConfigInput) => {
+    const client = getSupabaseClient();
+    const service = new SupabaseService(client);
+
+    const updated = await service.updateConfig(id, data);
+    setConfig(updated);
+    success('Configuration renamed successfully');
+  };
+
   if (loading) {
     return <ConfigEditorSkeleton />;
   }
@@ -140,7 +151,17 @@ export function ConfigEditorClient({ configId }: { configId: string }) {
               <span className="sm:hidden">Back</span>
             </Button>
             <div className="h-6 w-px bg-gray-200 hidden sm:block" />
-            <h1 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{config.key_name}</h1>
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <h1 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{config.key_name}</h1>
+              <button
+                onClick={() => setShowRenameDialog(true)}
+                className="flex-shrink-0 p-1.5 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200 active:scale-95"
+                title="Rename configuration"
+                aria-label="Rename configuration"
+              >
+                <Pencil className="w-4 h-4" />
+              </button>
+            </div>
           </div>
           <div className="px-3 py-1.5 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-600 whitespace-nowrap">
             Tenant: {tenant.name}
@@ -185,6 +206,12 @@ export function ConfigEditorClient({ configId }: { configId: string }) {
       </main>
       <Footer />
       <ToastContainer toasts={toasts} onClose={removeToast} />
+      <EditConfigDialog
+        config={config}
+        isOpen={showRenameDialog}
+        onClose={() => setShowRenameDialog(false)}
+        onSubmit={handleRenameConfig}
+      />
     </div>
   );
 }

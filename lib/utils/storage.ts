@@ -79,3 +79,22 @@ export function generateTenantName(): string {
   return `${prefix} ${suffix}`;
 }
 
+/**
+ * Generates a random config key name with common patterns
+ * @returns A randomly generated config key name
+ */
+export function generateConfigName(): string {
+  const prefixes = ['homepage', 'app', 'feature', 'api', 'ui', 'mobile', 'web', 'settings', 'config', 'flags'];
+  const suffixes = ['flags', 'config', 'settings', 'params', 'options', 'prefs', 'data'];
+  
+  const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+  
+  // Avoid duplicate (e.g., "flags_flags")
+  if (prefix === suffix) {
+    return prefix;
+  }
+  
+  return `${prefix}_${suffix}`;
+}
+

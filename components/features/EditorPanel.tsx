@@ -156,24 +156,29 @@ export function EditorPanel({
                   variant="ghost"
                   onClick={() => setShowTemplates(!showTemplates)}
                   icon={FileText}
-                  className="text-xs px-2 sm:px-3"
+                  className="text-xs px-2 sm:px-3 group"
                 >
-                  <span className="hidden sm:inline">Templates</span>
-                  <span className="sm:hidden">Templates</span>
+                  <span className="hidden sm:inline-block pointer-events-none">Templates</span>
+                  <span className="sm:hidden pointer-events-none">Templates</span>
                 </Button>
                 {showTemplates && (
-                  <div className="absolute right-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg z-50">
-                    <div className="p-2">
-                      {templates.map((template) => (
-                        <button
-                          key={template.type}
-                          onClick={() => handleTemplateSelect(template.type)}
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded-md transition-all duration-200 hover:translate-x-1 active:scale-95"
-                        >
-                          <div className="font-medium text-gray-900">{template.name}</div>
-                          <div className="text-xs text-gray-500 mt-0.5">{template.description}</div>
-                        </button>
-                      ))}
+                  <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-lg z-50 shadow-lg">
+                    <div className="px-3 py-2 border-b border-gray-100 bg-gray-50 rounded-t-lg">
+                      <div className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Templates</div>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto">
+                      <div className="p-1.5">
+                        {templates.map((template) => (
+                          <button
+                            key={template.type}
+                            onClick={() => handleTemplateSelect(template.type)}
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded-md transition-colors duration-150 active:bg-gray-100"
+                          >
+                            <div className="font-medium text-gray-900 leading-snug">{template.name}</div>
+                            <div className="text-xs text-gray-500 mt-0.5 leading-snug">{template.description}</div>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}
