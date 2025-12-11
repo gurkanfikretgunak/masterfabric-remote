@@ -45,7 +45,7 @@ export function TenantTable({ tenants, configs, onEdit, onDelete }: TenantTableP
                 {getConfigCount(tenant.id)}
               </TableCell>
               <TableCell align="right">
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center justify-end gap-1 sm:gap-2">
                   <Button
                     variant="ghost"
                     onClick={(e) => {
@@ -53,8 +53,10 @@ export function TenantTable({ tenants, configs, onEdit, onDelete }: TenantTableP
                       onEdit(tenant);
                     }}
                     icon={Edit2}
+                    className="px-2 sm:px-4"
                   >
-                    Edit
+                    <span className="hidden sm:inline">Edit</span>
+                    <span className="sm:hidden">Edit</span>
                   </Button>
                   <Button
                     variant="danger"
@@ -63,8 +65,10 @@ export function TenantTable({ tenants, configs, onEdit, onDelete }: TenantTableP
                       onDelete(tenant);
                     }}
                     icon={Trash2}
+                    className="px-2 sm:px-4"
                   >
-                    Delete
+                    <span className="hidden sm:inline">Delete</span>
+                    <span className="sm:hidden">Del</span>
                   </Button>
                 </div>
               </TableCell>

@@ -25,7 +25,7 @@ export function TableHeader({ columns }: TableHeaderProps) {
         {columns.map((col, i) => (
           <th
             key={i}
-            className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase ${
+            className={`px-3 sm:px-6 py-2 sm:py-3 text-xs font-medium text-gray-500 uppercase whitespace-nowrap ${
               i === columns.length - 1 ? 'text-right' : 'text-left'
             }`}
           >
@@ -66,7 +66,7 @@ export function TableCell({ children, align = 'left', className = '', colSpan }:
   return (
     <td 
       colSpan={colSpan}
-      className={`px-6 py-4 text-sm ${align === 'right' ? 'text-right' : 'text-left'} ${className}`}
+      className={`px-3 sm:px-6 py-3 sm:py-4 text-sm ${align === 'right' ? 'text-right' : 'text-left'} ${className}`}
     >
       {children}
     </td>

@@ -17,7 +17,7 @@ export function Spinner({ size = 'md', className = '' }: SpinnerProps) {
 
 export function LoadingOverlay({ message = 'Loading...' }: { message?: string }) {
   return (
-    <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-start justify-center pt-8 z-50">
       <div className="text-center">
         <Spinner size="lg" />
         <p className="mt-4 text-sm text-gray-600">{message}</p>

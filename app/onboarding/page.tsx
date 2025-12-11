@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 import { Alert } from '@/components/ui/Alert';
 import { ToastContainer } from '@/components/ui/Toast';
+import { Footer } from '@/components/layout/Footer';
 import { useToast } from '@/lib/hooks/useToast';
 import { storage } from '@/lib/utils/storage';
 import { createSupabaseClient } from '@/lib/supabase/client';
@@ -243,14 +244,14 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <h1 className="text-xl font-semibold text-gray-900">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
+        <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
           MasterFabric Remote
         </h1>
       </header>
 
       {/* Content */}
-      <main className="max-w-2xl mx-auto py-12 px-4">
+      <main className="max-w-2xl mx-auto py-8 sm:py-12 px-4">
         {/* Welcome Card */}
         <Card className="mb-6">
           <CardContent>
@@ -430,44 +431,7 @@ export default function OnboardingPage() {
         </Button>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white mt-12">
-        <div className="max-w-2xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-center gap-6">
-            <p className="text-xs text-gray-500">Powered by</p>
-            <a 
-              href="https://vercel.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
-            >
-              <Image 
-                src="/vercel-logotype-icon.svg" 
-                alt="Vercel" 
-                width={72} 
-                height={18} 
-                className="h-[18px]"
-              />
-            </a>
-            <span className="text-gray-300">•</span>
-            <a 
-              href="https://supabase.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity flex items-center gap-2"
-            >
-              <Image 
-                src="/supabase-logo-icon.svg" 
-                alt="Supabase" 
-                width={16} 
-                height={16} 
-                className="w-4 h-4"
-              />
-              <span className="text-sm text-gray-600">Supabase</span>
-            </a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>

@@ -14,8 +14,9 @@ import { NewTenantDialog } from '@/components/features/NewTenantDialog';
 import { EditTenantDialog } from '@/components/features/EditTenantDialog';
 import { ConfirmDialog } from '@/components/ui/Dialog';
 import { ToastContainer } from '@/components/ui/Toast';
-import { LoadingOverlay } from '@/components/ui/Spinner';
+import { DashboardSkeleton } from '@/components/ui/DashboardSkeleton';
 import { Alert } from '@/components/ui/Alert';
+import { Footer } from '@/components/layout/Footer';
 import { useToast } from '@/lib/hooks/useToast';
 import { getSupabaseClient } from '@/lib/supabase/client';
 import { SupabaseService } from '@/lib/supabase/SupabaseService';
@@ -148,18 +149,13 @@ export default function DashboardPage() {
   };
 
   if (loading) {
-    return (
-      <>
-        <Header />
-        <LoadingOverlay message="Loading dashboard..." />
-      </>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Header />
-      <main className="max-w-7xl mx-auto py-8 px-6">
+      <main className="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 flex-1">
         {error && (
           <div className="mb-6">
             <Alert message={error} type="error" />
@@ -167,7 +163,7 @@ export default function DashboardPage() {
         )}
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
           <StatsCard
             title="Total Configs"
             value={stats.totalConfigs}
@@ -277,6 +273,7 @@ export default function DashboardPage() {
           loading={deleteLoading}
         />
       </main>
+      <Footer />
       <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );

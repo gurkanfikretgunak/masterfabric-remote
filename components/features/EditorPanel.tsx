@@ -146,15 +146,16 @@ export function EditorPanel({
         borderColor={isPublished ? 'border-green-200' : 'border-gray-200'}
         action={
           editable ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               {hasChanges && (
                 <Button
                   variant="ghost"
                   onClick={handleRestore}
                   icon={RotateCcw}
-                  className="text-xs"
+                  className="text-xs px-2 sm:px-3"
                 >
-                  Restore
+                  <span className="hidden sm:inline">Restore</span>
+                  <span className="sm:hidden">Restore</span>
                 </Button>
               )}
               <div className="relative" ref={templateRef}>
@@ -162,9 +163,10 @@ export function EditorPanel({
                   variant="ghost"
                   onClick={() => setShowTemplates(!showTemplates)}
                   icon={FileText}
-                  className="text-xs"
+                  className="text-xs px-2 sm:px-3"
                 >
-                  Templates
+                  <span className="hidden sm:inline">Templates</span>
+                  <span className="sm:hidden">Templates</span>
                 </Button>
                 {showTemplates && (
                   <div className="absolute right-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg z-50">
@@ -276,13 +278,14 @@ export function EditorPanel({
 
       {editable && (
         <>
-          <div className="px-6 py-4 border-t border-gray-200 flex items-center gap-3">
+          <div className="px-4 sm:px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
             <Button
               variant="secondary"
               onClick={handleSave}
               disabled={!isValid || !hasChanges || saving}
               loading={saving}
               icon={Save}
+              className="w-full sm:w-auto"
             >
               Save Draft
             </Button>
@@ -292,6 +295,7 @@ export function EditorPanel({
               disabled={!isValid || !hasDraftContent || publishing}
               loading={publishing}
               icon={Rocket}
+              className="w-full sm:w-auto"
             >
               Publish
             </Button>

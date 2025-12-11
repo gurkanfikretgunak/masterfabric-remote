@@ -65,26 +65,28 @@ export function ConfigTable({ configs, tenants, onDelete }: ConfigTableProps) {
                 <StatusBadge status={getStatus(config)} />
               </TableCell>
               <TableCell align="right">
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center justify-end gap-1 sm:gap-2">
                   {getStatus(config) === 'published' && (
                     <Button
                       variant="ghost"
                       onClick={(e) => handleTest(e, config)}
                       icon={Play}
-                      className="text-xs"
+                      className="text-xs px-2 sm:px-4"
                     >
-                      Test
+                      <span className="hidden sm:inline">Test</span>
+                      <span className="sm:hidden">Test</span>
                     </Button>
                   )}
                   <button 
-                    className="text-sm text-gray-600 hover:text-gray-900 inline-flex items-center gap-1 transition-all duration-200 hover:gap-2 group"
+                    className="text-xs sm:text-sm text-gray-600 hover:text-gray-900 inline-flex items-center gap-1 transition-all duration-200 hover:gap-2 group px-2 sm:px-0"
                     onClick={(e) => {
                       e.stopPropagation();
                       router.push(`/config/${config.id}`);
                     }}
                   >
-                    Edit
-                    <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                    <span className="hidden sm:inline">Edit</span>
+                    <span className="sm:hidden">Edit</span>
+                    <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:translate-x-1" />
                   </button>
                   {onDelete && (
                     <button
@@ -92,10 +94,10 @@ export function ConfigTable({ configs, tenants, onDelete }: ConfigTableProps) {
                         e.stopPropagation();
                         onDelete(config);
                       }}
-                      className="p-2 text-gray-400 hover:text-red-600 transition-all duration-200 hover:scale-110 active:scale-95 rounded-md hover:bg-red-50"
+                      className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 transition-all duration-200 hover:scale-110 active:scale-95 rounded-md hover:bg-red-50"
                       title="Delete"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </button>
                   )}
                 </div>
