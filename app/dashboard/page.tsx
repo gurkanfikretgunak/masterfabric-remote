@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, FileJson, Activity, Building2 } from 'lucide-react';
+import { Plus, FileJson, Activity, Building2, Info } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -194,6 +194,19 @@ export default function DashboardPage() {
                 New Config
               </Button>
             }
+            description={
+              <div className="flex items-start gap-2">
+                <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="text-xs text-blue-900 font-medium mb-1">
+                    Remote Configuration Management
+                  </p>
+                  <p className="text-xs text-blue-700 leading-relaxed">
+                    Create and manage remote configurations stored in Supabase. Each configuration is tenant-specific and can be published to make it available via API. Use the API Integration section in each config to fetch published data in your applications using TypeScript, JavaScript, Go, or Dart.
+                  </p>
+                </div>
+              </div>
+            }
           />
           <CardContent className="p-0">
             <ConfigTable 
@@ -216,6 +229,19 @@ export default function DashboardPage() {
               >
                 New Tenant
               </Button>
+            }
+            description={
+              <div className="flex items-start gap-2">
+                <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="text-xs text-blue-900 font-medium mb-1">
+                    Why Separate Tenants?
+                  </p>
+                  <p className="text-xs text-blue-700 leading-relaxed">
+                    Tenants allow you to organize configurations by organization, environment, or application. Each tenant has isolated configurations, enabling you to manage different projects, staging/production environments, or client-specific settings independently. This multi-tenancy approach provides better organization, security, and scalability for your remote configuration management.
+                  </p>
+                </div>
+              </div>
             }
           />
           <CardContent className="p-0">
