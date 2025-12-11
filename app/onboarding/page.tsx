@@ -202,6 +202,38 @@ export default function OnboardingPage() {
           </CardContent>
         </Card>
 
+        {/* Tech Stack Card */}
+        <Card className="mb-6">
+          <CardHeader title="Tech Stack" />
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold text-gray-900">Frontend</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Next.js 16 (React 19)</li>
+                  <li>• TypeScript</li>
+                  <li>• Tailwind CSS 4</li>
+                  <li>• Lucide React Icons</li>
+                </ul>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold text-gray-900">Backend & Database</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Supabase (PostgreSQL)</li>
+                  <li>• Row Level Security (RLS)</li>
+                  <li>• PostgREST API</li>
+                  <li>• Supabase Auth</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <p className="text-xs text-gray-500">
+                Built with modern web technologies for secure, scalable, and real-time configuration management.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Credentials Card */}
         <Card className="mb-6">
           <CardHeader title="Connection Settings" />

@@ -2,15 +2,37 @@
 
 A multi-tenant remote configuration management system built with Next.js, Supabase, and TypeScript. Manage feature flags, A/B tests, and application configurations across multiple tenants with a clean, intuitive interface.
 
+## Screenshots
+
+![Dashboard View](docs/images/screenshot-1.png)
+*Dashboard - Overview of tenants and configurations*
+
+![Config Editor](docs/images/screenshot-2.png)
+*Config Editor - Side-by-side draft and published configuration management*
+
+![Onboarding](docs/images/screenshot-3.png)
+*Onboarding - Initial setup and Supabase connection*
+
+![Settings](docs/images/screenshot-4.png)
+*Settings - Application configuration and tenant management*
+
+![API Integration](docs/images/screenshot-5.png)
+*API Integration - Code examples and endpoint testing*
+
 ## Features
 
-- 🏢 **Multi-Tenant Support** - Manage configurations for multiple tenants/organizations
-- 📝 **Draft & Publish Workflow** - Create drafts, review changes, and publish when ready
+- 🏢 **Multi-Tenant Support** - Manage configurations for multiple tenants/organizations with automatic API key generation
+- 📝 **Draft & Publish Workflow** - Create drafts, review changes, and publish when ready with confirmation dialogs
 - 🔐 **Secure API Access** - Public API endpoints with RLS (Row Level Security) policies
-- 🎨 **Clean UI** - Minimalist white hierarchy design with Tailwind CSS
+- 🎨 **Clean UI** - Minimalist white hierarchy design with Tailwind CSS and skeleton loading states
 - ⚡ **Real-time Updates** - Built on Supabase for real-time data synchronization
-- 🧪 **Test Configurations** - Test API endpoints directly from the dashboard
-- 📊 **Analytics** - Track request counts and usage statistics
+- 🧪 **Test Configurations** - Test API endpoints directly from the dashboard with copyable code examples
+- 📊 **Analytics** - Track request counts and usage statistics per tenant
+- 🔄 **Rename Configurations** - Easily rename configuration keys with integrated rename functionality
+- 📋 **Template Library** - Pre-built JSON templates for common configuration patterns
+- 💻 **Multi-Language Examples** - API integration examples in multiple programming languages
+- 🏥 **Health Check** - Connection status indicator in the header
+- 📱 **Responsive Design** - Optimized layouts for various screen sizes
 
 ## Tech Stack
 
@@ -95,15 +117,17 @@ Displays all configurations with actions (Test, Edit, Delete). Supports filterin
 ### EditorPanel
 Side-by-side editor for managing draft and published configurations. Features:
 - JSON validation
-- Template library
+- Template library with multiple configuration types
 - Save draft / Publish workflow
 - Confirmation dialogs
+- Rename configuration functionality
+- Copyable code blocks
 
 ### ApiIntegration
-Shows API endpoints and cURL examples for accessing published configurations.
+Shows API endpoints and code examples in multiple languages (cURL, JavaScript, Python, etc.) for accessing published configurations. Features copy-to-clipboard functionality for easy integration.
 
 ### TenantTable
-Manage tenants with API key generation and configuration counts.
+Manage tenants with automatic API key generation (with `mfr_` prefix), configuration counts, and tenant name suggestions. Supports create, edit, and delete operations.
 
 ## API Usage
 
@@ -138,6 +162,20 @@ The public API uses Supabase's anonymous access with RLS policies. Only publishe
 - `request_count` (BIGINT)
 - `created_at`, `updated_at` (TIMESTAMP)
 
+## Recent Updates
+
+Based on the latest commits, recent enhancements include:
+
+- ✨ **Config Rename Functionality** - Integrated rename feature in ConfigEditorClient with EditConfigDialog
+- 🎨 **Enhanced UI Components** - Improved Button component with better interaction feedback
+- 📝 **Template System** - Expanded template library with new configuration types
+- 🔄 **API Refactoring** - PostgREST RPC function for direct JSON fetching
+- 💅 **Loading States** - Skeleton components replacing loading overlays for better UX
+- 🔒 **Security** - Enhanced security headers and SEO metadata
+- 📱 **Responsive Improvements** - Better layout widths and responsiveness across pages
+- 🏥 **Health Monitoring** - Connection status indicator in header
+- 📋 **Code Copying** - Copy-to-clipboard functionality in CodeBlock components
+
 ## Development
 
 ### Available Scripts
@@ -151,8 +189,9 @@ The public API uses Supabase's anonymous access with RLS policies. Only publishe
 
 - TypeScript strict mode enabled
 - ESLint configuration for Next.js
-- Tailwind CSS for styling
+- Tailwind CSS 4 for styling
 - Component-based architecture
+- Skeleton loading states for better UX
 
 ## Features in Detail
 

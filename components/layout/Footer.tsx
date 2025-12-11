@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 interface Commit {
   hash: string;
@@ -102,114 +103,130 @@ export function Footer({
   return (
     <footer className="border-t border-gray-200 bg-white mt-auto">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-xs text-gray-500">
-          {/* Source Repo Link */}
-          <a
-            href={repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-gray-700 transition-colors"
-          >
-            Source
-          </a>
+        <div className="flex flex-col items-center justify-center gap-4 text-xs text-gray-500">
+          {/* Built with section */}
+          <div className="flex items-center justify-center gap-2">
+            <span>Built with</span>
+            <Image
+              src="/cursot-logo-icon.svg"
+              alt=""
+              width={16}
+              height={16}
+              className="w-4 h-4"
+            />
+            <span>Cursor</span>
+          </div>
 
-          <span className="hidden sm:inline text-gray-300">•</span>
-
-          {/* Author GitHub Profile */}
-          <a
-            href={authorGithub}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-gray-700 transition-colors"
-          >
-            gurkanfikretgunak
-          </a>
-
-          <span className="hidden sm:inline text-gray-300">•</span>
-
-          {/* Last Commits Button with Popup */}
-          <div 
-            className="relative"
-            onMouseEnter={() => {
-              if (hideTimeoutRef.current) {
-                clearTimeout(hideTimeoutRef.current);
-                hideTimeoutRef.current = null;
-              }
-              setShowCommits(true);
-            }}
-            onMouseLeave={() => {
-              hideTimeoutRef.current = setTimeout(() => {
-                setShowCommits(false);
-              }, 200);
-            }}
-          >
-            <button
-              onClick={() => setShowCommits(!showCommits)}
-              className="hover:text-gray-700 transition-colors font-mono"
+          {/* Links section */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+            {/* Source Repo Link */}
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-700 transition-colors"
             >
-              {lastCommitHash || '...'}
-            </button>
+              Source
+            </a>
 
-            {/* Commits Popup */}
-            {showCommits && (
-              <div
-                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-[calc(100vw-2rem)] sm:w-80 lg:w-96 max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+            <span className="hidden sm:inline text-gray-300">•</span>
+
+            {/* Author GitHub Profile */}
+            <a
+              href={authorGithub}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-700 transition-colors"
+            >
+              gurkanfikretgunak
+            </a>
+
+            <span className="hidden sm:inline text-gray-300">•</span>
+
+            {/* Last Commits Button with Popup */}
+            <div 
+              className="relative"
+              onMouseEnter={() => {
+                if (hideTimeoutRef.current) {
+                  clearTimeout(hideTimeoutRef.current);
+                  hideTimeoutRef.current = null;
+                }
+                setShowCommits(true);
+              }}
+              onMouseLeave={() => {
+                hideTimeoutRef.current = setTimeout(() => {
+                  setShowCommits(false);
+                }, 200);
+              }}
+            >
+              <button
+                onClick={() => setShowCommits(!showCommits)}
+                className="hover:text-gray-700 transition-colors font-mono"
               >
-                <div className="p-3 border-b border-gray-200 bg-gray-50 rounded-t-lg">
-                  <span className="text-sm font-medium text-gray-900">Recent Commits</span>
-                </div>
-                <div className="max-h-64 overflow-y-auto">
-                  {loading ? (
-                    <div className="p-4 text-center text-sm text-gray-500">
-                      Loading commits...
-                    </div>
-                  ) : commits.length > 0 ? (
-                    <div className="divide-y divide-gray-100">
-                      {commits.map((commit, index) => (
-                        <div
-                          key={index}
-                          className="p-3 hover:bg-gray-50 transition-colors"
-                        >
-                          <div className="flex items-start gap-2">
-                            <div className="flex-shrink-0 mt-0.5">
-                              <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <code className="text-xs font-mono text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
-                                  {commit.hash}
-                                </code>
-                                <span className="text-xs text-gray-400">{commit.date}</span>
+                {lastCommitHash || '...'}
+              </button>
+
+              {/* Commits Popup */}
+              {showCommits && (
+                <div
+                  className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-[calc(100vw-2rem)] sm:w-80 lg:w-96 max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                >
+                  <div className="p-3 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+                    <span className="text-sm font-medium text-gray-900">Recent Commits</span>
+                  </div>
+                  <div className="max-h-64 overflow-y-auto">
+                    {loading ? (
+                      <div className="p-4 text-center text-sm text-gray-500">
+                        Loading commits...
+                      </div>
+                    ) : commits.length > 0 ? (
+                      <div className="divide-y divide-gray-100">
+                        {commits.map((commit, index) => (
+                          <div
+                            key={index}
+                            className="p-3 hover:bg-gray-50 transition-colors"
+                          >
+                            <div className="flex items-start gap-2">
+                              <div className="flex-shrink-0 mt-0.5">
+                                <div className="w-2 h-2 rounded-full bg-green-500"></div>
                               </div>
-                              <p className="text-sm text-gray-900 leading-snug break-words">
-                                {commit.message}
-                              </p>
-                              <p className="text-xs text-gray-500 mt-1">
-                                {commit.author}
-                              </p>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <code className="text-xs font-mono text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+                                    {commit.hash}
+                                  </code>
+                                  <span className="text-xs text-gray-400">{commit.date}</span>
+                                </div>
+                                <p className="text-sm text-gray-900 leading-snug break-words">
+                                  {commit.message}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {commit.author}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="p-4 text-center text-sm text-gray-500">
-                      No commits found
-                    </div>
-                  )}
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="p-4 text-center text-sm text-gray-500">
+                        No commits found
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-2 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+                    <a
+                      href={`${repoUrl}/commits`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-gray-600 hover:text-gray-900 flex items-center justify-center"
+                    >
+                      View all commits
+                    </a>
+                  </div>
                 </div>
-                <div className="p-2 border-t border-gray-200 bg-gray-50 rounded-b-lg">
-                  <a
-                    href={`${repoUrl}/commits`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-gray-600 hover:text-gray-900 flex items-center justify-center"
-                  >
-                    View all commits
-                  </a>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
