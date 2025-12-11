@@ -5,7 +5,6 @@ import { X } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { CreateTenantInput } from '@/types';
-import { generateApiKey } from '@/lib/utils/storage';
 
 interface NewTenantDialogProps {
   isOpen: boolean;
@@ -15,7 +14,6 @@ interface NewTenantDialogProps {
 
 export function NewTenantDialog({ isOpen, onClose, onSubmit }: NewTenantDialogProps) {
   const [name, setName] = useState('');
-  const [apiKey, setApiKey] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,16 +23,15 @@ export function NewTenantDialog({ isOpen, onClose, onSubmit }: NewTenantDialogPr
     e.preventDefault();
     setError(null);
 
-    if (!name || !apiKey) {
-      setError('Please fill in all fields');
+    if (!name) {
+      setError('Please enter a tenant name');
       return;
     }
 
     setLoading(true);
     try {
-      await onSubmit({ name, api_key: apiKey });
+      await onSubmit({ name });
       setName('');
-      setApiKey('');
       onClose();
     } catch (err: any) {
       setError(err.message || 'Failed to create tenant');
@@ -61,14 +58,6 @@ export function NewTenantDialog({ isOpen, onClose, onSubmit }: NewTenantDialogPr
             value={name}
             onChange={setName}
             placeholder="e.g., Mobile App"
-          />
-          <Input
-            label="API Key"
-            value={apiKey}
-            onChange={setApiKey}
-            placeholder="e.g., mfr_xxxxxxxxxxxx"
-            showGenerateButton
-            onGenerate={generateApiKey}
           />
           {error && (
             <div className="text-sm text-red-600">{error}</div>

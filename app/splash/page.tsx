@@ -18,6 +18,12 @@ export default function SplashPage() {
         return;
       }
 
+      // If the user explicitly signed out, keep the connection but don't auto-login.
+      if (storage.isSignedOut()) {
+        router.replace('/onboarding');
+        return;
+      }
+
       const url = storage.getSupabaseUrl();
       const anonKey = storage.getSupabaseAnonKey();
 
@@ -36,17 +42,18 @@ export default function SplashPage() {
         const { error } = await authService.signInWithDefaultCredentials();
 
         if (error) {
-          // Auth failed - clear storage and redirect to onboarding
-          storage.clearCredentials();
+          // Auth failed - keep connection so user can fix SQL/user, but stop auto-login.
+          storage.setSignedOut(true);
           router.replace('/onboarding');
           return;
         }
 
+        storage.setSignedOut(false);
         // Success - redirect to dashboard
         router.replace('/dashboard');
       } catch (err) {
-        // Any error - clear storage and redirect to onboarding
-        storage.clearCredentials();
+        // Any error - keep connection so user can fix, but stop auto-login.
+        storage.setSignedOut(true);
         router.replace('/onboarding');
       }
     }

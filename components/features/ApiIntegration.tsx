@@ -24,9 +24,6 @@ export function ApiIntegration({ config, tenant }: ApiIntegrationProps) {
   // Note: RLS policy ensures only published configs are returned
   const endpoint = `${supabaseUrl}/rest/v1/app_configs?key_name=eq.${config.key_name}&tenant_id=eq.${config.tenant_id}&select=published_json`;
   
-  // Use tenant's API key for authorization, Supabase anon key for apikey header
-  const apiKey = tenant.api_key || supabaseAnonKey || 'your-api-key';
-  
   // For public API access (anon RLS policy), only apikey header is needed
   const curlCommand = `curl -X GET "${endpoint}" \\
   -H "apikey: ${supabaseAnonKey || 'your-anon-key'}"`;
@@ -63,8 +60,7 @@ export function ApiIntegration({ config, tenant }: ApiIntegrationProps) {
         <div className="pb-4 border-b border-gray-200">
           <p className="text-sm text-gray-600">
             Use this endpoint to fetch published configuration data in your application. 
-            The API key is automatically included in the request headers. Make sure to use 
-            your tenant's API key for authentication.
+            The Supabase Anon Key is automatically included in the request headers for authentication.
           </p>
         </div>
 

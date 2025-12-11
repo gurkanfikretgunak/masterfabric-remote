@@ -1,6 +1,7 @@
 const STORAGE_KEYS = {
   SUPABASE_URL: 'supabase_url',
   SUPABASE_ANON_KEY: 'supabase_anon_key',
+  SIGNED_OUT: 'mfr_signed_out',
 } as const;
 
 export const storage = {
@@ -26,6 +27,17 @@ export const storage = {
 
   hasCredentials(): boolean {
     return !!(this.getSupabaseUrl() && this.getSupabaseAnonKey());
+  },
+
+  isSignedOut(): boolean {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem(STORAGE_KEYS.SIGNED_OUT) === '1';
+  },
+
+  setSignedOut(value: boolean): void {
+    if (typeof window === 'undefined') return;
+    if (value) localStorage.setItem(STORAGE_KEYS.SIGNED_OUT, '1');
+    else localStorage.removeItem(STORAGE_KEYS.SIGNED_OUT);
   },
 
   clearCredentials(): void {

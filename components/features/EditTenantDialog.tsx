@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { Tenant, UpdateTenantInput } from '@/types';
-import { generateApiKey } from '@/lib/utils/storage';
 
 interface EditTenantDialogProps {
   tenant: Tenant | null;
@@ -16,14 +15,12 @@ interface EditTenantDialogProps {
 
 export function EditTenantDialog({ tenant, isOpen, onClose, onSubmit }: EditTenantDialogProps) {
   const [name, setName] = useState('');
-  const [apiKey, setApiKey] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (tenant) {
       setName(tenant.name);
-      setApiKey(tenant.api_key);
       setError(null);
     }
   }, [tenant]);
@@ -34,14 +31,14 @@ export function EditTenantDialog({ tenant, isOpen, onClose, onSubmit }: EditTena
 
     setError(null);
 
-    if (!name || !apiKey) {
-      setError('Please fill in all fields');
+    if (!name) {
+      setError('Please enter a tenant name');
       return;
     }
 
     setLoading(true);
     try {
-      await onSubmit(tenant.id, { name, api_key: apiKey });
+      await onSubmit(tenant.id, { name });
       onClose();
     } catch (err: any) {
       setError(err.message || 'Failed to update tenant');
@@ -58,14 +55,6 @@ export function EditTenantDialog({ tenant, isOpen, onClose, onSubmit }: EditTena
           value={name}
           onChange={setName}
           placeholder="e.g., Mobile App"
-        />
-        <Input
-          label="API Key"
-          value={apiKey}
-          onChange={setApiKey}
-          placeholder="e.g., mfr_xxxxxxxxxxxx"
-          showGenerateButton
-          onGenerate={generateApiKey}
         />
         {error && (
           <div className="text-sm text-red-600">{error}</div>

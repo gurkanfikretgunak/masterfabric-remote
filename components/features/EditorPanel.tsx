@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import { Save, Rocket, AlertCircle, FileText, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
-import { Dialog } from '@/components/ui/Dialog';
 import { isValidJSON, formatJSON } from '@/lib/utils/json';
 import { templates, TemplateType } from '@/lib/utils/templates';
 
@@ -32,7 +31,6 @@ export function EditorPanel({
   const [publishing, setPublishing] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
-  const [showPublishDialog, setShowPublishDialog] = useState(false);
   const templateRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -81,15 +79,9 @@ export function EditorPanel({
     }
   };
 
-  const handlePublishClick = () => {
-    if (!isValid || !onPublish) return;
-    setShowPublishDialog(true);
-  };
-
-  const handlePublishConfirm = async (option: string) => {
+  const handlePublish = async () => {
     if (!isValid || !onPublish) return;
 
-    setShowPublishDialog(false);
     setPublishing(true);
     try {
       await onPublish();
@@ -291,7 +283,7 @@ export function EditorPanel({
             </Button>
             <Button
               variant="primary"
-              onClick={handlePublishClick}
+              onClick={handlePublish}
               disabled={!isValid || !hasDraftContent || publishing}
               loading={publishing}
               icon={Rocket}
@@ -300,61 +292,6 @@ export function EditorPanel({
               Publish
             </Button>
           </div>
-          
-          <Dialog
-            isOpen={showPublishDialog}
-            onClose={() => setShowPublishDialog(false)}
-            title="Publish Configuration"
-            size="md"
-          >
-            <div className="space-y-4">
-              <p className="text-sm text-gray-600">
-                Are you sure you want to publish this configuration? This will make it live and available via the API.
-              </p>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Publish Options:</label>
-                <div className="space-y-2">
-                  <button
-                    onClick={() => handlePublishConfirm('now')}
-                    className="w-full text-left px-4 py-3 border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
-                  >
-                    <div className="font-medium text-gray-900">Publish Now</div>
-                    <div className="text-xs text-gray-500 mt-1">Make this configuration live immediately</div>
-                  </button>
-                  <button
-                    onClick={() => handlePublishConfirm('with-notification')}
-                    className="w-full text-left px-4 py-3 border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
-                  >
-                    <div className="font-medium text-gray-900">Publish & Notify</div>
-                    <div className="text-xs text-gray-500 mt-1">Publish and send notification to team</div>
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 pt-2 border-t border-gray-200">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setShowPublishDialog(false)}
-                  disabled={publishing}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="button"
-                  variant="primary"
-                  onClick={() => handlePublishConfirm('now')}
-                  loading={publishing}
-                  className="flex-1"
-                  icon={Rocket}
-                >
-                  Publish Now
-                </Button>
-              </div>
-            </div>
-          </Dialog>
         </>
       )}
     </Card>

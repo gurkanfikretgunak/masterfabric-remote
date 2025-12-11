@@ -18,7 +18,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
-        <div className="max-w-3xl mx-auto flex items-center gap-2 sm:gap-4">
+        <div className="max-w-5xl mx-auto flex items-center gap-2 sm:gap-4">
           <Button
             variant="ghost"
             onClick={() => router.push('/dashboard')}
@@ -34,7 +34,7 @@ export default function SettingsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-3xl mx-auto py-8 px-4 sm:px-6 space-y-6">
+      <main className="max-w-5xl mx-auto py-8 px-4 sm:px-6 space-y-6">
         <ConnectionSettingsCard />
         <SessionCard />
         <DangerZoneCard />

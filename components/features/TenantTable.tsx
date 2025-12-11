@@ -13,22 +13,17 @@ interface TenantTableProps {
 }
 
 export function TenantTable({ tenants, configs, onEdit, onDelete }: TenantTableProps) {
-  const maskApiKey = (key: string) => {
-    if (key.length <= 8) return key;
-    return `${key.substring(0, 8)}...`;
-  };
-
   const getConfigCount = (tenantId: string) => {
     return configs.filter((c) => c.tenant_id === tenantId).length;
   };
 
   return (
     <Table>
-      <TableHeader columns={['Tenant Name', 'API Key', 'Configs', 'Actions']} />
+      <TableHeader columns={['Tenant Name', 'Configs', 'Actions']} />
       <tbody className="divide-y divide-gray-200">
         {tenants.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={4} className="text-center text-gray-500 py-8">
+            <TableCell colSpan={3} className="text-center text-gray-500 py-8">
               No tenants found. Create your first tenant to get started.
             </TableCell>
           </TableRow>
@@ -37,9 +32,6 @@ export function TenantTable({ tenants, configs, onEdit, onDelete }: TenantTableP
             <TableRow key={tenant.id}>
               <TableCell className="text-gray-900 font-medium">
                 {tenant.name}
-              </TableCell>
-              <TableCell className="text-gray-600 font-mono text-sm">
-                {maskApiKey(tenant.api_key)}
               </TableCell>
               <TableCell className="text-gray-600">
                 {getConfigCount(tenant.id)}

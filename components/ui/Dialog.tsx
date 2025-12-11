@@ -18,7 +18,7 @@ export function Dialog({ isOpen, onClose, title, children, size = 'md' }: Dialog
   const sizes = {
     sm: 'max-w-md',
     md: 'max-w-lg',
-    lg: 'max-w-2xl',
+    lg: 'max-w-4xl',
   };
 
   return (

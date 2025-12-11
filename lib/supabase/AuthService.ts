@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-const DEFAULT_EMAIL = 'masterfabric-developer@masterfabric.io';
+const DEFAULT_EMAIL = 'masterfabric-developer@masterfabric.co';
 const DEFAULT_PASSWORD = 'masterfabric-developer';
 
 export class AuthService {

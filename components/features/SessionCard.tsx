@@ -18,14 +18,14 @@ export function SessionCard() {
       const client = getSupabaseClient();
       const authService = new AuthService(client);
       await authService.signOut();
-      storage.clearCredentials();
+      storage.setSignedOut(true);
       info('Signed out successfully');
       setTimeout(() => {
         router.push('/onboarding');
       }, 500);
     } catch (err) {
-      // Even if sign out fails, clear storage and redirect
-      storage.clearCredentials();
+      // Even if sign out fails, mark signed out and redirect
+      storage.setSignedOut(true);
       info('Signed out');
       setTimeout(() => {
         router.push('/onboarding');
@@ -40,7 +40,7 @@ export function SessionCard() {
         <p className="text-sm text-gray-600 mb-4">
           Logged in as:{' '}
           <span className="font-medium text-gray-900">
-            masterfabric-developer@masterfabric.io
+            masterfabric-developer@masterfabric.co
           </span>
         </p>
         <Button variant="secondary" onClick={handleSignOut} icon={LogOut}>

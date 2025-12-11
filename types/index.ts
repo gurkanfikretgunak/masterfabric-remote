@@ -1,7 +1,6 @@
 export interface Tenant {
   id: string;
   name: string;
-  api_key: string;
   created_at: string;
   updated_at: string;
 }
@@ -26,12 +25,10 @@ export interface AppConfigWithTenant extends AppConfig {
 
 export interface CreateTenantInput {
   name: string;
-  api_key: string;
 }
 
 export interface UpdateTenantInput {
   name?: string;
-  api_key?: string;
 }
 
 export interface CreateConfigInput {
