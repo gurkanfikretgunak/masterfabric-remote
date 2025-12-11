@@ -65,3 +65,17 @@ export function generateApiKey(length: number = 12): string {
   return `mfr_${randomPart}`;
 }
 
+/**
+ * Generates a random tenant name with common prefixes
+ * @returns A randomly generated tenant name
+ */
+export function generateTenantName(): string {
+  const prefixes = ['Production', 'Staging', 'Development', 'Mobile', 'Web', 'API', 'Backend', 'Frontend'];
+  const suffixes = ['App', 'Service', 'Platform', 'System', 'Client', 'Server'];
+  
+  const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+  
+  return `${prefix} ${suffix}`;
+}
+

@@ -136,6 +136,7 @@ export function EditorPanel({
         title={title}
         titleColor={isPublished ? 'text-green-700' : 'text-gray-900'}
         borderColor={isPublished ? 'border-green-200' : 'border-gray-200'}
+        headerBgColor={isPublished ? 'var(--color-green-100)' : ''}
         action={
           editable ? (
             <div className="flex items-center gap-1 sm:gap-2">
@@ -194,7 +195,7 @@ export function EditorPanel({
           </p>
         </div>
       )}
-      <CardContent>
+      <CardContent contentBgColor={isPublished ? 'var(--color-green-50)' : ''}>
         <div
           className={`rounded-lg border overflow-hidden ${
             isValid ? 'border-gray-200' : 'border-red-300 bg-red-50'

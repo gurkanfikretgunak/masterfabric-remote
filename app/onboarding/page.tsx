@@ -176,6 +176,7 @@ export default function OnboardingPage() {
               className="font-medium mb-2 text-left leading-8"
               style={{
                 fontSize: '28px',
+                lineHeight: '32px',
                 color: 'rgba(16, 24, 40, 1)',
                 verticalAlign: 'middle',
                 backgroundClip: 'unset',

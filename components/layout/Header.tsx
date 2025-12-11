@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Settings, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -8,9 +9,71 @@ import { getSupabaseClient } from '@/lib/supabase/client';
 import { AuthService } from '@/lib/supabase/AuthService';
 import { storage } from '@/lib/utils/storage';
 
+type HealthStatus = 'healthy' | 'unhealthy' | 'checking';
+
 export function Header() {
   const router = useRouter();
   const { info } = useToast();
+  const [healthStatus, setHealthStatus] = useState<HealthStatus>('checking');
+  const [showHealthTooltip, setShowHealthTooltip] = useState(false);
+
+  useEffect(() => {
+    // Check health status on mount
+    checkHealth();
+    // Set up periodic health checks every 30 seconds
+    const healthInterval = setInterval(checkHealth, 30000);
+    return () => clearInterval(healthInterval);
+  }, []);
+
+  const checkHealth = async () => {
+    const supabaseUrl = storage.getSupabaseUrl();
+    const supabaseAnonKey = storage.getSupabaseAnonKey();
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setHealthStatus('unhealthy');
+      return;
+    }
+
+    try {
+      setHealthStatus('checking');
+      const client = getSupabaseClient();
+      // Simple health check: try to query tenants table
+      const { error } = await client
+        .from('tenants')
+        .select('id')
+        .limit(1);
+      
+      if (error) {
+        setHealthStatus('unhealthy');
+      } else {
+        setHealthStatus('healthy');
+      }
+    } catch (error) {
+      setHealthStatus('unhealthy');
+    }
+  };
+
+  const getHealthStatusText = () => {
+    switch (healthStatus) {
+      case 'healthy':
+        return 'Supabase connection healthy';
+      case 'unhealthy':
+        return 'Supabase connection unhealthy';
+      case 'checking':
+        return 'Checking connection...';
+    }
+  };
+
+  const getHealthDotColor = () => {
+    switch (healthStatus) {
+      case 'healthy':
+        return 'bg-green-500';
+      case 'unhealthy':
+        return 'bg-red-500';
+      case 'checking':
+        return 'bg-yellow-500';
+    }
+  };
 
   const handleSignOut = async () => {
     try {
@@ -44,6 +107,23 @@ export function Header() {
           </p>
         </div>
         <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          {/* Health Check Status */}
+          <div
+            className="relative inline-flex items-center cursor-help"
+            onMouseEnter={() => setShowHealthTooltip(true)}
+            onMouseLeave={() => setShowHealthTooltip(false)}
+          >
+            <div className={`w-2 h-2 rounded-full ${getHealthDotColor()} animate-pulse`}></div>
+            {showHealthTooltip && (
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap z-50">
+                {getHealthStatusText()}
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                  <div className="w-2 h-2 bg-gray-900 rotate-45"></div>
+                </div>
+              </div>
+            )}
+          </div>
+          
           <Button
             variant="ghost"
             onClick={() => router.push('/settings')}

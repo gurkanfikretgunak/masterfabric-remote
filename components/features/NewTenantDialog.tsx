@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Info } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { CreateTenantInput } from '@/types';
+import { generateTenantName } from '@/lib/utils/storage';
 
 interface NewTenantDialogProps {
   isOpen: boolean;
@@ -53,12 +54,42 @@ export function NewTenantDialog({ isOpen, onClose, onSubmit }: NewTenantDialogPr
           </button>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          {/* Information Section */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-2">
+            <div className="flex items-start gap-2">
+              <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1 space-y-1">
+                <p className="text-xs text-blue-900 font-medium">
+                  What is a Tenant?
+                </p>
+                <p className="text-xs text-blue-700 leading-relaxed">
+                  A tenant represents an organization, environment, or application that needs isolated configurations. 
+                  Use tenants to separate configurations for different projects, environments (staging/production), 
+                  or client-specific settings. Each tenant has its own set of configurations.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <Input
             label="Tenant Name"
             value={name}
             onChange={setName}
             placeholder="e.g., Mobile App"
+            showGenerateButton={true}
+            onGenerate={generateTenantName}
           />
+          
+          {/* Tenant Name Badge Preview */}
+          {name && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500">Preview:</span>
+              <span className="px-2.5 py-1 text-xs font-medium rounded-full border bg-gray-50 text-gray-700 border-gray-200">
+                {name}
+              </span>
+            </div>
+          )}
+
           {error && (
             <div className="text-sm text-red-600">{error}</div>
           )}
