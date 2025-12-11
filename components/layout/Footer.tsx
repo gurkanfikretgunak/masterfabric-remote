@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Commit {
   hash: string;
@@ -22,6 +22,7 @@ export function Footer({
   const [showCommits, setShowCommits] = useState(false);
   const [loading, setLoading] = useState(false);
   const [lastCommitHash, setLastCommitHash] = useState<string>('');
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Fetch the last commit hash on mount
@@ -34,6 +35,15 @@ export function Footer({
       fetchCommits();
     }
   }, [showCommits]);
+
+  useEffect(() => {
+    // Cleanup timeout on unmount
+    return () => {
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const fetchLastCommitHash = async () => {
     try {
@@ -91,7 +101,7 @@ export function Footer({
 
   return (
     <footer className="border-t border-gray-200 bg-white mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-xs text-gray-500">
           {/* Source Repo Link */}
           <a
@@ -118,10 +128,22 @@ export function Footer({
           <span className="hidden sm:inline text-gray-300">•</span>
 
           {/* Last Commits Button with Popup */}
-          <div className="relative">
+          <div 
+            className="relative"
+            onMouseEnter={() => {
+              if (hideTimeoutRef.current) {
+                clearTimeout(hideTimeoutRef.current);
+                hideTimeoutRef.current = null;
+              }
+              setShowCommits(true);
+            }}
+            onMouseLeave={() => {
+              hideTimeoutRef.current = setTimeout(() => {
+                setShowCommits(false);
+              }, 200);
+            }}
+          >
             <button
-              onMouseEnter={() => setShowCommits(true)}
-              onMouseLeave={() => setShowCommits(false)}
               onClick={() => setShowCommits(!showCommits)}
               className="hover:text-gray-700 transition-colors font-mono"
             >
@@ -131,9 +153,7 @@ export function Footer({
             {/* Commits Popup */}
             {showCommits && (
               <div
-                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-[calc(100vw-2rem)] sm:w-80 lg:w-96 max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg z-50"
-                onMouseEnter={() => setShowCommits(true)}
-                onMouseLeave={() => setShowCommits(false)}
+                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-[calc(100vw-2rem)] sm:w-80 lg:w-96 max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg z-50"
               >
                 <div className="p-3 border-b border-gray-200 bg-gray-50 rounded-t-lg">
                   <span className="text-sm font-medium text-gray-900">Recent Commits</span>
