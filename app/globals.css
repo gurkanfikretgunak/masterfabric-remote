@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111827;
 }
 
 @theme inline {
@@ -12,15 +12,67 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  background: #ffffff;
+  color: #111827;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* White Hierarchy Design System */
+* {
+  box-sizing: border-box;
+}
+
+/* Remove shadows in light mode per design system */
+@media (prefers-color-scheme: light) {
+  * {
+    box-shadow: none !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Enhanced Button Interactions */
+button:not(:disabled) {
+  transition: all 0.2s ease-in-out;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Smooth transitions for interactive elements */
+a, button, input, select, textarea {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Table row hover enhancement */
+tr:hover {
+  transition: background-color 0.15s ease-in-out;
+}
+
+/* Card hover effect */
+.card-interactive {
+  transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.card-interactive:hover {
+  transform: translateY(-2px);
+  border-color: #D1D5DB;
+}
+
+/* Input focus enhancement */
+input:focus, textarea:focus, select:focus {
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Icon animations */
+svg {
+  transition: transform 0.2s ease-in-out;
+}
+
+button:hover svg {
+  transform: scale(1.1);
 }
