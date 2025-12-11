@@ -34,7 +34,7 @@ export function Header() {
 
   return (
     <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
-      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex-1 min-w-0">
           <h1 className="text-lg sm:text-xl font-semibold text-gray-900 mb-1">
             MasterFabric Remote

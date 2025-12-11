@@ -287,6 +287,7 @@ export default function OnboardingPage() {
                   ? '-- Loading setup SQL script...'
                   : sqlScript || '-- Failed to load setup SQL script. Please refresh the page.'
               }
+              language="sql"
               copyable={false}
               className="mb-4"
             />

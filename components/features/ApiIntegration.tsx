@@ -14,9 +14,12 @@ interface ApiIntegrationProps {
   tenant: Tenant;
 }
 
+type CodeLanguage = 'ts' | 'js' | 'go' | 'dart';
+
 export function ApiIntegration({ config, tenant }: ApiIntegrationProps) {
   const { success } = useToast();
   const [showApiKey, setShowApiKey] = useState(false);
+  const [activeTab, setActiveTab] = useState<CodeLanguage>('js');
   const supabaseUrl = storage.getSupabaseUrl();
   const supabaseAnonKey = storage.getSupabaseAnonKey();
   
@@ -40,7 +43,7 @@ export function ApiIntegration({ config, tenant }: ApiIntegrationProps) {
 const response = await fetch('${rpcEndpoint}', {
   method: 'POST',
   headers: {
-    'apikey': '${supabaseAnonKey ? supabaseAnonKey.substring(0, 20) + '...' : 'your-anon-key'}',
+    'apikey': '${supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIs...'}',
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
@@ -53,10 +56,166 @@ const config = await response.json(); // Direct JSON, no array!`;
   // JavaScript example using table endpoint (alternative)
   const jsExampleTable = `// Using table endpoint - returns array, extract published_json
 const response = await fetch('${tableEndpoint}', {
-  headers: { 'apikey': '${supabaseAnonKey ? supabaseAnonKey.substring(0, 20) + '...' : 'your-anon-key'}' }
+  headers: { 'apikey': '${supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIs...'}' }
 });
 const data = await response.json();
 const config = data[0]?.published_json || {}; // Extract from array`;
+
+  // TypeScript example using RPC function (recommended)
+  const tsExampleRpc = `// Using RPC function - returns JSON directly
+interface ConfigResponse {
+  [key: string]: any;
+}
+
+const response = await fetch('${rpcEndpoint}', {
+  method: 'POST',
+  headers: {
+    'apikey': '${supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIs...'}',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    p_key_name: '${config.key_name}',
+    p_tenant_id: '${config.tenant_id}'
+  })
+});
+const config: ConfigResponse = await response.json(); // Direct JSON, no array!`;
+  
+  // TypeScript example using table endpoint (alternative)
+  const tsExampleTable = `// Using table endpoint - returns array, extract published_json
+interface TableResponse {
+  published_json: Record<string, any>;
+}
+
+const response = await fetch('${tableEndpoint}', {
+  headers: { 'apikey': '${supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIs...'}' }
+});
+const data: TableResponse[] = await response.json();
+const config = data[0]?.published_json || {}; // Extract from array`;
+
+  // Go example using RPC function (recommended)
+  const goExampleRpc = `// Using RPC function - returns JSON directly
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+type ConfigResponse map[string]interface{}
+
+func fetchConfig() (ConfigResponse, error) {
+    url := "${rpcEndpoint}"
+    payload := map[string]string{
+        "p_key_name": "${config.key_name}",
+        "p_tenant_id": "${config.tenant_id}",
+    }
+    
+    jsonData, _ := json.Marshal(payload)
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("apikey", "${supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIs...'}")
+    req.Header.Set("Content-Type", "application/json")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    var config ConfigResponse
+    json.NewDecoder(resp.Body).Decode(&config)
+    return config, nil
+}`;
+  
+  // Go example using table endpoint (alternative)
+  const goExampleTable = `// Using table endpoint - returns array, extract published_json
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+type TableResponse struct {
+    PublishedJSON map[string]interface{} \`json:"published_json"\`
+}
+
+func fetchConfig() (map[string]interface{}, error) {
+    url := "${tableEndpoint}"
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("apikey", "${supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIs...'}")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    var data []TableResponse
+    json.NewDecoder(resp.Body).Decode(&data)
+    
+    if len(data) > 0 {
+        return data[0].PublishedJSON, nil
+    }
+    return make(map[string]interface{}), nil
+}`;
+
+  // Dart example using RPC function (recommended)
+  const dartExampleRpc = `// Using RPC function - returns JSON directly
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<Map<String, dynamic>> fetchConfig() async {
+  final url = Uri.parse('${rpcEndpoint}');
+  
+  final response = await http.post(
+    url,
+    headers: {
+      'apikey': '${supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIs...'}',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'p_key_name': '${config.key_name}',
+      'p_tenant_id': '${config.tenant_id}',
+    }),
+  );
+  
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  } else {
+    throw Exception('Failed to load config');
+  }
+}`;
+  
+  // Dart example using table endpoint (alternative)
+  const dartExampleTable = `// Using table endpoint - returns array, extract published_json
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<Map<String, dynamic>> fetchConfig() async {
+  final url = Uri.parse('${tableEndpoint}');
+  
+  final response = await http.get(
+    url,
+    headers: {
+      'apikey': '${supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIs...'}',
+    },
+  );
+  
+  if (response.statusCode == 200) {
+    final List<dynamic> data = jsonDecode(response.body);
+    if (data.isNotEmpty) {
+      return data[0]['published_json'] as Map<String, dynamic>;
+    }
+    return {};
+  } else {
+    throw Exception('Failed to load config');
+  }
+}`;
 
   const formatRelativeTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -80,6 +239,69 @@ const config = data[0]?.published_json || {}; // Extract from array`;
     if (!key) return 'Not set';
     if (key.length <= 8) return '••••••••';
     return `${key.substring(0, 8)}${'•'.repeat(Math.min(key.length - 8, 20))}`;
+  };
+
+  const getCodeExample = (method: 'rpc' | 'table', language: CodeLanguage): string => {
+    if (method === 'rpc') {
+      switch (language) {
+        case 'ts': return tsExampleRpc;
+        case 'js': return jsExampleRpc;
+        case 'go': return goExampleRpc;
+        case 'dart': return dartExampleRpc;
+      }
+    } else {
+      switch (language) {
+        case 'ts': return tsExampleTable;
+        case 'js': return jsExampleTable;
+        case 'go': return goExampleTable;
+        case 'dart': return dartExampleTable;
+      }
+    }
+  };
+
+  const CodeTabs = ({ method }: { method: 'rpc' | 'table' }) => {
+    const getLanguageLabel = (lang: CodeLanguage): string => {
+      switch (lang) {
+        case 'ts': return 'TypeScript';
+        case 'js': return 'JavaScript';
+        case 'go': return 'Go';
+        case 'dart': return 'Dart';
+      }
+    };
+
+    const getSyntaxLanguage = (lang: CodeLanguage): string => {
+      switch (lang) {
+        case 'ts': return 'typescript';
+        case 'js': return 'javascript';
+        case 'go': return 'go';
+        case 'dart': return 'dart';
+      }
+    };
+
+    return (
+      <div className="mt-2">
+        <div className="flex items-center gap-1 mb-2 border-b border-gray-200">
+          {(['ts', 'js', 'go', 'dart'] as CodeLanguage[]).map((lang) => (
+            <button
+              key={lang}
+              onClick={() => setActiveTab(lang)}
+              className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+                activeTab === lang
+                  ? 'text-gray-900 border-b-2 border-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {getLanguageLabel(lang)}
+            </button>
+          ))}
+        </div>
+        <CodeBlock 
+          code={getCodeExample(method, activeTab)} 
+          language={getSyntaxLanguage(activeTab)}
+          copyable={false} 
+        />
+      </div>
+    );
   };
 
   return (
@@ -106,14 +328,11 @@ const config = data[0]?.published_json || {}; // Extract from array`;
             <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
               Method 1: RPC Function (Recommended) - Returns JSON Directly
             </label>
-            <CodeBlock code={curlCommandRpc} />
+            <CodeBlock code={curlCommandRpc} language="bash" />
             <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded text-xs text-green-800">
               ✓ Returns JSON directly: <code className="bg-white px-1 rounded">{"{"}"en": {"{"}...{"}"}, "es": {"{"}...{"}"}{"}"}</code>
             </div>
-            <div className="mt-2">
-              <p className="text-xs text-gray-600 font-medium mb-1">JavaScript:</p>
-              <CodeBlock code={jsExampleRpc} copyable={false} />
-            </div>
+            <CodeTabs method="rpc" />
           </div>
 
           {/* Table Endpoint Method (Alternative) */}
@@ -121,14 +340,11 @@ const config = data[0]?.published_json || {}; // Extract from array`;
             <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
               Method 2: Table Endpoint (Alternative) - Returns Array
             </label>
-            <CodeBlock code={curlCommandTable} />
+            <CodeBlock code={curlCommandTable} language="bash" />
             <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-800">
               ⚠️ Returns array: <code className="bg-white px-1 rounded">[{"{"}"published_json": {"{"}...{"}"}{"}"}]</code> - Extract <code className="bg-white px-1 rounded">data[0].published_json</code>
             </div>
-            <div className="mt-2">
-              <p className="text-xs text-gray-600 font-medium mb-1">JavaScript:</p>
-              <CodeBlock code={jsExampleTable} copyable={false} />
-            </div>
+            <CodeTabs method="table" />
           </div>
         </div>
 

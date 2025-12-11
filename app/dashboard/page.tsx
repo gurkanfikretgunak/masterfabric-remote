@@ -155,7 +155,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
-      <main className="max-w-5xl mx-auto py-6 sm:py-8 px-4 sm:px-6 flex-1">
+      <main className="max-w-6xl mx-auto py-6 sm:py-8 px-4 sm:px-6 flex-1">
         {error && (
           <div className="mb-6">
             <Alert message={error} type="error" />

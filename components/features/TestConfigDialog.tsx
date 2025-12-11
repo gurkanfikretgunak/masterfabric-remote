@@ -157,7 +157,7 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
             </div>
             <div>
               <p className="text-xs text-blue-800 font-medium mb-1">Request Body:</p>
-              <CodeBlock code={JSON.stringify(requestBody, null, 2)} copyable={false} />
+              <CodeBlock code={JSON.stringify(requestBody, null, 2)} language="json" copyable={false} />
             </div>
             <p className="text-xs text-blue-600 mt-2">
               Using RPC function <code className="bg-white px-1 rounded">get_published_config</code> - Returns JSON directly (not wrapped in array).
@@ -216,7 +216,7 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
                   <label className="block text-xs font-medium text-gray-500 uppercase mb-2">
                     Response Body
                   </label>
-                  <CodeBlock code={formatJSON(response.data)} copyable={true} />
+                  <CodeBlock code={formatJSON(response.data)} language="json" copyable={true} />
                 </div>
 
                 {/* Response Headers */}
@@ -225,7 +225,7 @@ export function TestConfigDialog({ config, tenant, isOpen, onClose }: TestConfig
                     Response Headers
                   </summary>
                   <div className="p-4 bg-gray-50 border-t border-gray-200">
-                    <CodeBlock code={formatJSON(response.headers)} copyable={true} />
+                    <CodeBlock code={formatJSON(response.headers)} language="json" copyable={true} />
                   </div>
                 </details>
               </div>

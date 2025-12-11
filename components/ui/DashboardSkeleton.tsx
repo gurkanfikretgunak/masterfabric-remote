@@ -7,7 +7,7 @@ export function DashboardSkeleton() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
-      <main className="max-w-5xl mx-auto py-6 sm:py-8 px-4 sm:px-6 flex-1">
+      <main className="max-w-6xl mx-auto py-6 sm:py-8 px-4 sm:px-6 flex-1">
         {/* Stats Cards Skeleton */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
           {[1, 2, 3].map((i) => (

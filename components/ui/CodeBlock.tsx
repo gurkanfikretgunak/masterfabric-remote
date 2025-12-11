@@ -2,14 +2,22 @@
 
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 interface CodeBlockProps {
   code: string;
+  language?: string;
   copyable?: boolean;
   className?: string;
 }
 
-export function CodeBlock({ code, copyable = true, className = '' }: CodeBlockProps) {
+export function CodeBlock({ 
+  code, 
+  language = 'text', 
+  copyable = true, 
+  className = '' 
+}: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -20,9 +28,25 @@ export function CodeBlock({ code, copyable = true, className = '' }: CodeBlockPr
 
   return (
     <div className={`relative w-full ${className}`}>
-      <pre className="p-4 bg-gray-900 rounded-lg text-sm text-gray-100 font-mono overflow-x-auto w-full max-w-full">
-        <code className="block whitespace-pre text-left">{code}</code>
-      </pre>
+      <SyntaxHighlighter
+        language={language}
+        style={vscDarkPlus}
+        customStyle={{
+          margin: 0,
+          padding: '1rem',
+          borderRadius: '0.5rem',
+          fontSize: '0.875rem',
+          lineHeight: '1.5',
+          background: '#1e1e1e',
+        }}
+        codeTagProps={{
+          style: {
+            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+          }
+        }}
+      >
+        {code}
+      </SyntaxHighlighter>
       {copyable && (
         <button
           onClick={handleCopy}
