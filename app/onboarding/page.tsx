@@ -242,6 +242,17 @@ export default function OnboardingPage() {
                   />
                   <span>Supabase</span>
                 </div>
+                <span className="text-gray-300">•</span>
+                <div className="flex items-center gap-1.5">
+                  <Image
+                    src="/ts-logo-icon.svg"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="w-4 h-4"
+                  />
+                  <span>TypeScript</span>
+                </div>
               </div>
               
               {/* Hosting Suggestion */}
