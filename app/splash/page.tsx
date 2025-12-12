@@ -222,54 +222,6 @@ export default function SplashPage() {
                 </Button>
               )}
             </div>
-
-            {/* Built with section */}
-            <div className="flex items-center justify-center gap-2 flex-wrap text-sm text-gray-600">
-              <span>Built with</span>
-              <div className="flex items-center gap-1.5">
-                <Image
-                  src="/cursot-logo-icon.svg"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="w-4 h-4"
-                />
-                <span className="font-medium">Cursor</span>
-              </div>
-              <span className="text-gray-300">•</span>
-              <div className="flex items-center gap-1.5">
-                <Image
-                  src="/nextjs-logo-icon.svg"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="w-4 h-4"
-                />
-                <span>Next.js</span>
-              </div>
-              <span className="text-gray-300">•</span>
-              <div className="flex items-center gap-1.5">
-                <Image
-                  src="/supabase-logo-icon.svg"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="w-4 h-4"
-                />
-                <span>Supabase</span>
-              </div>
-              <span className="text-gray-300">•</span>
-              <div className="flex items-center gap-1.5">
-                <Image
-                  src="/ts-logo-icon.svg"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="w-4 h-4"
-                />
-                <span>TypeScript</span>
-              </div>
-            </div>
           </div>
         )}
       </div>
