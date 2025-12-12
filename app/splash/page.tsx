@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Database, Code, Palette, Shield, Zap, Layers } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { storage } from '@/lib/utils/storage';
 import { createSupabaseClient } from '@/lib/supabase/client';
@@ -93,16 +93,6 @@ export default function SplashPage() {
               <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4">
                 MasterFabric Remote
               </h1>
-              
-              {/* Low opacity information */}
-              <div className="space-y-2 opacity-40 max-w-2xl mx-auto">
-                <p className="text-sm text-gray-600">
-                  Manage feature flags, A/B tests, and application configurations across multiple tenants.
-                </p>
-                <p className="text-sm text-gray-600">
-                  Built with Next.js, Supabase, and TypeScript for secure, real-time configuration management.
-                </p>
-              </div>
             </div>
 
             {/* Tech Stack Grid */}
@@ -203,84 +193,19 @@ export default function SplashPage() {
                     </li>
                   </ul>
                 </div>
-
-                {/* Tailwind CSS Card */}
-                <div className="border border-gray-200 rounded-lg p-6 bg-white hover:border-gray-300 transition-colors">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Palette className="w-6 h-6 text-gray-700" />
-                    <h3 className="font-semibold text-gray-900">Tailwind CSS</h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Utility-first CSS framework for rapid UI development.
-                  </p>
-                  <ul className="space-y-1 text-xs text-gray-500">
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Utility Classes</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Responsive Design</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Customizable Theme</span>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* PostgreSQL Card */}
-                <div className="border border-gray-200 rounded-lg p-6 bg-white hover:border-gray-300 transition-colors">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Database className="w-6 h-6 text-gray-700" />
-                    <h3 className="font-semibold text-gray-900">PostgreSQL</h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Powerful open-source relational database with JSON support.
-                  </p>
-                  <ul className="space-y-1 text-xs text-gray-500">
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>JSONB Support</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>ACID Compliance</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Scalable Architecture</span>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* React Card */}
-                <div className="border border-gray-200 rounded-lg p-6 bg-white hover:border-gray-300 transition-colors">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Layers className="w-6 h-6 text-gray-700" />
-                    <h3 className="font-semibold text-gray-900">React</h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Modern UI library for building interactive user interfaces.
-                  </p>
-                  <ul className="space-y-1 text-xs text-gray-500">
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Component-Based</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Hooks & Context</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Server Components</span>
-                    </li>
-                  </ul>
-                </div>
               </div>
               <p className="text-center text-xs text-gray-500 opacity-60">
                 Use one or all. Best of breed products. Integrated as a platform.
+              </p>
+            </div>
+
+            {/* Low opacity information */}
+            <div className="mb-8 space-y-2 opacity-40 max-w-2xl mx-auto text-center">
+              <p className="text-sm text-gray-600">
+                Manage feature flags, A/B tests, and application configurations across multiple tenants.
+              </p>
+              <p className="text-sm text-gray-600">
+                Built with Next.js, Supabase, and TypeScript for secure, real-time configuration management.
               </p>
             </div>
 
